@@ -4,8 +4,12 @@ git:
   depth: false #
   autocrlf: input #
 
+os:
+  - linux
+  - osx
+
 install:
   - true
 
 script:
-  - sh ./gradlew check
+  - sh ./gradlew check #sh per windows
