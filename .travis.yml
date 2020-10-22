@@ -9,6 +9,9 @@ os:
   - osx
   - windows
 
+dist: focal #ubuntu ultimo, ne ha di più, anche di Windows solo 10
+#macOs osx_image: xcode9.4
+
 arch:
   - amd64
   - arm64
@@ -17,7 +20,14 @@ env:
   global:
     - GRAVIS_REPO="https://github.com/DanySK/Gravis-CI.git"
     - GRAVIS="$HOME/gravis"
+    #- JDK="adopt-openj9@1.11" #deve funzionare con tutte le jdk
+  matrix:
+    - JDK="adopt@1.11"
+    - JDK="adopt@1.14"
+    - JDK="adopt@1.8"
+    - JDK="adopt-openj9@1.14"
     - JDK="adopt-openj9@1.11"
+    - JDK="adopt-openj9@1.8"
 
 before_install: #ambiente wind uso choco per installare java
   - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS
