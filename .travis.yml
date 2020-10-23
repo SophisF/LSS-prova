@@ -73,7 +73,7 @@ jobs:
       *import_workspace
     - <<: *reference_machine
       stage: Compile
-      script: sh ./gradlew compile
+      script: sh ./gradlew compileKotlin
       workspaces:
         create: *workspace_name
         paths:
