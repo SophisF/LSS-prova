@@ -69,9 +69,8 @@ jobs:
   include:
     - <<: *reference_machine
       stage: Complete check
+      <<: *import_workspace
       script: travis_retry sh ./gradlew check
-      workspaces:
-        - use: *workspace_name
     - <<: *reference_machine
       stage: Compile
       script: sh ./gradlew compileKotlin --parallel
@@ -82,9 +81,8 @@ jobs:
           - "$HOME/.gradle" #non riscarichi il wrapper nè ricompilare buildgradlekts
     - <<: *reference_machine
       stage: Kotlin Style Check
+      <<: *import_workspace
       script: sh ./gradlew detekt ktlintCheck --parallel #non vale la pena risalvare ws, dipende da costo
-      workspaces:
-        use: *workspace_name
       #*import_workspace  #compilatore scala forse serve per evitare die seguire + volte
 
 before_install: #ambiente wind uso choco per installare java
