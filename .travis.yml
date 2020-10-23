@@ -4,18 +4,6 @@ _reference_arch: &reference_arch
                  amd64 #nostra chiave
 _reference_jdk: &reference_jdk #è una stringa
                   JDK="adopt@1.11"
-_workspace_name: &workspace_name
-                   compile_env
-
-_import_workspace: &import_workspace
-  workspaces:
-    use: *workspace_name
-
-_reference_machine: &reference_machine
-  arch: *reference_arch
-  os: *reference_os
-  env: *reference_jdk
-
 #limite: accodare elem in lista e concatenare stringhe
 #si può fare merge di mappe
 
@@ -57,6 +45,18 @@ stages:
   - Kotlin Style Check
   - Complete check
   - test #default di travis
+
+_reference_machine: &reference_machine
+  arch: *reference_arch
+  os: *reference_os
+  env: *reference_jdk
+
+  _workspace_name: &workspace_name
+                     compiled_env
+
+  _import_workspace: &import_workspace
+    workspaces:
+      use: *workspace_name
 
 jobs:
   exclude:
