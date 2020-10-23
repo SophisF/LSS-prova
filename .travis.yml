@@ -29,6 +29,13 @@ env:
     - JDK="adopt-openj9@1.11"
     - JDK="adopt-openj9@1.8"
 
+jobs:
+  exclude:
+    - arch: arm64
+      env: JDK="adopt-openj9@1.8"
+    - arch: arm64
+      env: JDK="adopt-openj9@1.14"
+
 before_install: #ambiente wind uso choco per installare java
   - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS
   - source $GRAVIS/install-jdk
