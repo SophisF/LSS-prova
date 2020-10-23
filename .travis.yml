@@ -75,10 +75,11 @@ jobs:
       stage: Compile
       script: sh ./gradlew compileKotlin --parallel
       workspaces:
-        create: *workspace_name
-        paths:
-          - "$TRAVIS_BUILD_DIR"
-          - "$HOME/.gradle" #non riscarichi il wrapper nè ricompilare buildgradlekts
+        create:
+          name: *workspace_name
+          paths:
+            - "$TRAVIS_BUILD_DIR"
+            - "$HOME/.gradle" #non riscarichi il wrapper nè ricompilare buildgradlekts
     - <<: *reference_machine
       stage: Kotlin Style Check
       <<: *import_workspace
