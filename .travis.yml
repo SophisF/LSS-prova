@@ -1,3 +1,18 @@
+_reference_os: &reference_os
+                 linux #nostra chiave
+_reference_arch: &reference_arch
+                 amd64 #nostra chiave
+_reference_jdk: &reference_jdk #è una stringa
+                  JDK="adopt@1.11"
+
+_reference_machine: &reference_machine
+  arch: *reference_arch
+  os: *reference_os
+  env: *reference_jdk
+
+#limite: accodare elem in lista e concatenare stringhe
+#si può fare merge di mappe
+
 language: minimal #configuriamo noi
 
 git:
@@ -5,7 +20,7 @@ git:
   autocrlf: input #
 
 os:
-  - linux
+  - *reference_os
   - osx
   - windows
 
@@ -13,7 +28,7 @@ dist: focal #ubuntu ultimo, ne ha di più, anche di Windows solo 10
 #macOs osx_image: xcode9.4
 
 arch:
-  - amd64
+  - *reference_arch
   - arm64
 
 env:
@@ -22,19 +37,30 @@ env:
     - GRAVIS="$HOME/gravis"
     #- JDK="adopt-openj9@1.11" #deve funzionare con tutte le jdk
   matrix:
-    - JDK="adopt@1.11"
+    - *reference_jdk
     - JDK="adopt@1.14"
     - JDK="adopt@1.8"
     - JDK="adopt-openj9@1.14"
     - JDK="adopt-openj9@1.11"
     - JDK="adopt-openj9@1.8"
 
+stages:
+  - check
+  - test
+
 jobs:
   exclude:
-    - arch: arm64
+    - arch: *reference_arch
       env: JDK="adopt-openj9@1.8"
-    - arch: arm64
+    - arch: *reference_arch
       env: JDK="adopt-openj9@1.14"
+    - <<: *reference_machine
+      stage: test
+  include:
+    - <<: *reference_machine
+      stage: check
+      script:
+        - travis_retry sh ./gradlew check
 
 before_install: #ambiente wind uso choco per installare java
   - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS
@@ -44,4 +70,4 @@ install:
   - true
 
 script:
-  - travis_retry sh ./gradlew check #sh per windows
+  - travis_retry sh ./gradlew test #sh per windows
