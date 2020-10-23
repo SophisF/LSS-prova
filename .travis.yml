@@ -4,6 +4,12 @@ _reference_arch: &reference_arch
                  amd64 #nostra chiave
 _reference_jdk: &reference_jdk #è una stringa
                   JDK="adopt@1.11"
+_workspace_name: &workspace_name
+                   compile_env
+
+_import_workspace: &import_workspace
+  workspaces:
+    use: *workspace_name
 
 _reference_machine: &reference_machine
   arch: *reference_arch
@@ -62,14 +68,22 @@ jobs:
   include:
     - <<: *reference_machine
       stage: Complete check
-      script:
-        - travis_retry sh ./gradlew check
+      script: travis_retry sh ./gradlew check
+      *import_workspace
     - <<: *reference_machine
       stage: Compile
       script: sh ./gradlew compile
+      workspaces:
+        create: *workspace_name
+        paths:
+          - "$TRAVIS_BUILD_DIR"
+          - "$HOME/.gradle" #non riscarichi il wrapper nè ricompilare buildgradlekts
     - <<: *reference_machine
       stage: Kotlin Style Check
-      script: sh ./gradlew detekt ktlintCheck --parallel
+      script: sh ./gradlew detekt ktlintCheck --parallel #non vale la pena risalvare ws, dipende da costo
+      *import_workspace
+      #workspaces:                                   #compilatore scala forse serve per evitare die seguire + volte
+       # use: *workspace_name
 
 before_install: #ambiente wind uso choco per installare java
   - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS
