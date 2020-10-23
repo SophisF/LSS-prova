@@ -1,5 +1,5 @@
 _reference_os: &reference_os
-                 linux #nostra chiave
+                 linux #sono stringhe equivalente a " " o ''
 _reference_arch: &reference_arch
                  amd64 #nostra chiave
 _reference_jdk: &reference_jdk #è una stringa
@@ -31,12 +31,13 @@ arch:
   - *reference_arch
   - arm64
 
+#mappa
 env:
   global:
     - GRAVIS_REPO="https://github.com/DanySK/Gravis-CI.git"
     - GRAVIS="$HOME/gravis"
     #- JDK="adopt-openj9@1.11" #deve funzionare con tutte le jdk
-  matrix:
+  matrix: #&pippo, per portarmi dietro la lista
     - *reference_jdk
     - JDK="adopt@1.14"
     - JDK="adopt@1.8"
@@ -45,8 +46,10 @@ env:
     - JDK="adopt-openj9@1.8"
 
 stages:
-  - check
-  - test
+  - Compile
+  - Kotlin Style Check
+  - Complete check
+  - test #default di travis
 
 jobs:
   exclude:
@@ -61,6 +64,12 @@ jobs:
       stage: check
       script:
         - travis_retry sh ./gradlew check
+    - <<: *reference_machine
+      stage: Compile
+      script: sh ./gradlew compile
+    - <<: *reference_machine
+      stage: Kotlin Style Check
+      script: sh ./gradlew detekt ktlintCheck --parallel
 
 before_install: #ambiente wind uso choco per installare java
   - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS
