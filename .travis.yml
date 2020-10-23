@@ -49,7 +49,8 @@ stages:
   - Compile
   - Kotlin Style Check
   - Complete check
-  - test #default di travis
+  - name: test #default di travis
+    if: 'commit_message !~ /\[\s*skip(?: |-|\.)test\s*\].*'
   - name: Delivery
     if: repo = SophisF/LSS-prova
 
