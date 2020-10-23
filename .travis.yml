@@ -61,7 +61,7 @@ jobs:
       stage: test
   include:
     - <<: *reference_machine
-      stage: check
+      stage: Complete check
       script:
         - travis_retry sh ./gradlew check
     - <<: *reference_machine
