@@ -1,3 +1,5 @@
+if: repo != head_repo
+
 _reference_os: &reference_os
                  linux #sono stringhe equivalente a " " o ''
 _reference_arch: &reference_arch
@@ -50,6 +52,7 @@ stages:
   - test #default di travis
   - name: Delivery
     if: repo = SophisF/LSS-prova
+
     #posso matchare delle regex(regular expression)
 
 _reference_machine: &reference_machine
