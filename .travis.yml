@@ -40,11 +40,17 @@ env:
     - JDK="adopt-openj9@1.11"
     - JDK="adopt-openj9@1.8"
 
+_repo_slug: &repo_slug
+  SophisF/LSS-prova
+
 stages:
   - Compile
   - Kotlin Style Check
   - Complete check
   - test #default di travis
+  - name: Delivery
+    if: repo = SophisF/LSS-prova
+    #posso matchare delle regex(regular expression)
 
 _reference_machine: &reference_machine
   arch: *reference_arch
@@ -85,6 +91,8 @@ jobs:
       <<: *import_workspace
       script: sh ./gradlew detekt ktlintCheck --parallel #non vale la pena risalvare ws, dipende da costo
       #*import_workspace  #compilatore scala forse serve per evitare die seguire + volte
+    - stage: Delivery
+      script: true
 
 before_install: #ambiente wind uso choco per installare java
   - travis_retry git clone --depth 1 $GRAVIS_REPO $GRAVIS
